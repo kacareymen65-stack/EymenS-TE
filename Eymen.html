@@ -1,0 +1,101 @@
+import numpy as np
+import random
+import string
+
+# Define some basic shapes for low poly elements
+def generate_low_poly_shape(num_vertices=3, size=1.0):
+    """
+    Generates vertices for a random low-poly shape.
+    This is a simplified example. A full implementation would define specific shapes and faces.
+    """
+    vertices = np.random.rand(num_vertices, 3) * size
+    return vertices
+
+# Character Properties
+class Character:
+    def __init__(self, position):
+        self.position = position
+        self.hair_color = "brown"
+        self.clothing = {"jacket": "green", "pants": "brown"}
+        self.backpack = {"type": "canvas", "contents": ["water bottle"]}
+        self.geometry = generate_low_poly_shape(num_vertices=100, size=1.5) # Representing the whole body structure
+
+    def describe(self):
+        return f"A low-poly character with {self.hair_color} hair, wearing a {self.clothing['jacket']} jacket and {self.clothing['pants']} pants, carrying a {self.backpack['type']} backpack (containing: {', '.join(self.backpack['contents'])}). Geometry: {len(self.geometry)} vertices."
+
+# Environment Elements
+class SandDune:
+    def __init__(self, position, scale):
+        self.position = position
+        self.scale = scale
+        self.geometry = generate_low_poly_shape(num_vertices=1500, size=scale) # Large number for dunal structure
+
+class Ocean:
+    def __init__(self, position):
+        self.position = position
+        self.color = (30, 144, 255) # Blue
+        self.foam_color = (255, 255, 255) # White
+        # A full simulation would define dynamic vertex placement for waves
+        self.geometry = generate_low_poly_shape(num_vertices=5000, size=50) # Representing surface vertices
+
+class Animal:
+    def __init__(self, type, position):
+        self.type = type
+        self.position = position
+        vertices_map = {"gazelle": 200, "fox": 150}
+        self.geometry = generate_low_poly_shape(num_vertices=vertices_map[type], size=0.8)
+
+class LavaFlow:
+    def __init__(self, position):
+        self.position = position
+        self.color = (255, 69, 0) # Red-orange
+        self.geometry = generate_low_poly_shape(num_vertices=300, size=20) # Representing flowing lava geometry
+
+class Ruin:
+    def __init__(self, position):
+        self.position = position
+        self.geometry = generate_low_poly_shape(num_vertices=800, size=10) # Representing arch and tower structure
+
+class Airship:
+    def __init__(self, position):
+        self.position = position
+        self.geometry = generate_low_poly_shape(num_vertices=600, size=15) # Representing detailed body and wings
+
+# Main Scene Description
+class LowPolyDesertCoastlineScene:
+    def __init__(self):
+        self.size = (1920, 1080)
+        self.sky_color = (135, 206, 235) # Light blue
+        self.sun_position = (1000, 1000) # Poly-sun approximation
+        self.sun_color = (255, 255, 224) # Light yellow
+        self.poly_sun = generate_low_poly_shape(num_vertices=500, size=80)
+        self.poly_clouds = [generate_low_poly_shape(num_vertices=100, size=20) for _ in range(5)]
+        
+        self.character = Character(position=(100, 50))
+        self.dunes = [SandDune(position=(20, 0), scale=200), SandDune(position=(-50, 0), scale=150)]
+        self.ocean = Ocean(position=(100, 0))
+        self.animals = [Animal(type="gazelle", position=(40, 20)), Animal(type="fox", position=(-30, 25))]
+        self.lava_flows = [LavaFlow(position=(80, 10)), LavaFlow(position=(-20, 15))]
+        self.ruins = [Ruin(position=(50, 5))]
+        self.airship = Airship(position=(120, 150))
+        self.mountains = [generate_low_poly_shape(num_vertices=1200, size=100) for _ in range(3)] # Distant poly-peaks
+
+    def describe_scene(self):
+        desc = f"A low-poly scene description with code elements:\n"
+        desc += f"- Scene size: {self.size}\n"
+        desc += f"- Sky color: {self.sky_color}\n"
+        desc += f"- Sun position: {self.sun_position}, shape: {len(self.poly_sun)} vertices\n"
+        desc += f"- Number of cloud clusters: {len(self.poly_clouds)}\n"
+        desc += f"- Character: {self.character.describe()}\n"
+        desc += f"- Dunes: {[len(d.geometry) for d in self.dunes]} vertices\n"
+        desc += f"- Ocean: {len(self.ocean.geometry)} vertices\n"
+        desc += f"- Animals: {[a.type + ': ' + str(len(a.geometry)) + ' vertices' for a in self.animals]}\n"
+        desc += f"- Lava Flows: {[len(lf.geometry) for lf in self.lava_flows]} vertices\n"
+        desc += f"- Ruins: {len(self.ruins[0].geometry)} vertices\n"
+        desc += f"- Airship: {len(self.airship.geometry)} vertices\n"
+        desc += f"- Mountains: {[len(m) for m in self.mountains]} vertices\n"
+        return desc
+
+# Usage example:
+my_scene = LowPolyDesertCoastlineScene()
+print(my_scene.describe_scene())
